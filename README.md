@@ -1,4 +1,4 @@
-`##Start this project
+`##QUOTE OF THE DAY APP
 `
 `
 npm start 
