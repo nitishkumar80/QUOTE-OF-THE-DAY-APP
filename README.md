@@ -1,4 +1,4 @@
-`## QUOTE OF THE DAY APP
+## QUOTE OF THE DAY APP
 
 
 
