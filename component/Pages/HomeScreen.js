@@ -1,115 +1,18 @@
-// import { StyleSheet, Text, View, Button, Share } from 'react-native';
-// import React, { useEffect, useState } from 'react';
-// import axios from 'axios';
-
-// export default function HomeScreen() {
-//   const [quote, setQuote] = useState('');
-//   const [author, setAuthor] = useState('');
-
-//   useEffect(() => {
-//     fetchRandomQuote();
-//     const interval = setInterval(fetchRandomQuote, 10000); // Fetch a new quote every 10 seconds
-//     return () => clearInterval(interval); // Clean up the interval
-//   }, []);
-
-//   const fetchRandomQuote = async () => {
-//     const apiUrl = 'https://api.breakingbadquotes.xyz/v1/quotes';
-  
-//     try {
-//       const response = await axios.get(apiUrl);
-//       console.log('Response data:', response.data); // Add this line to log response data
-//       if (response.data && response.data.length > 0) {
-//         const randomIndex = Math.floor(Math.random() * response.data.length);
-//         setQuote(response.data[randomIndex].quote);
-//         setAuthor(response.data[randomIndex].author);
-//       }
-//     } catch (error) {
-//       console.error(error);
-//     }
-//   };
-  
-
-//   const shareQuote = async () => {
-//     try {
-//       const result = await Share.share({
-//         message: `"${quote}" - ${author}`,
-//       });
-//       if (result.action === Share.sharedAction) {
-//         if (result.activityType) {
-//           // Shared successfully
-//         } else {
-//           // Shared successfully
-//         }
-//       } else if (result.action === Share.dismissedAction) {
-//         // Share dismissed
-//       }
-//     } catch (error) {
-//       console.error(error.message);
-//     }
-//   };
-
-//   const saveToFavorites = () => {
-//     // Implement saving to favorites logic here
-//   };
-
-//   return (
-//     <View style={styles.container}>
-//       <Text style={styles.quote}>"{quote}"</Text>
-//       <Text style={styles.author}>- {author}</Text>
-//       <View style={styles.buttonContainer}>
-//         <Button title="Share" onPress={shareQuote} color="#007bff" />
-//         <Button title="Save to Favorites" onPress={saveToFavorites} color="#28a745" />
-//       </View>
-//     </View>
-//   );
-// }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//     paddingHorizontal: 20,
-//   },
-//   quote: {
-//     fontSize: 20,
-//     fontStyle: 'italic',
-//     marginBottom: 10,
-//     textAlign: 'center',
-//   },
-//   author: {
-//     fontSize: 16,
-//     fontWeight: 'bold',
-//     textAlign: 'center',
-//   },
-//   buttonContainer: {
-//     flexDirection: 'row',
-//     justifyContent: 'space-between',
-//     width: '100%',
-//     marginTop: 20,
-//   },
-// });
-
-
-
-
-
-
-
-// HomeScreen.js
-// HomeScreen.js
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Button, Share } from 'react-native';
 import axios from 'axios';
 
+const colors = ['#FF5733', '#33FF57', '#337AFF', '#E833FF', '#FFE333']; // Array of background colors
+
 export default function HomeScreen({ navigation }) {
   const [quote, setQuote] = useState('');
   const [author, setAuthor] = useState('');
-  const [favorites, setFavorites] = useState([]);
+  const [backgroundColor, setBackgroundColor] = useState('');
+  const [favorites, setFavorites] = useState([]); // State variable for favorites
 
   useEffect(() => {
     fetchRandomQuote(); // Fetch quote initially
-    const intervalId = setInterval(fetchRandomQuote, 10000); // Fetch a new quote every 30 seconds
+    const intervalId = setInterval(fetchRandomQuote, 10000); // Fetch a new quote every 10 seconds
 
     return () => clearInterval(intervalId); // Cleanup on unmount
   }, []);
@@ -120,6 +23,9 @@ export default function HomeScreen({ navigation }) {
       const { quote, author } = response.data[0];
       setQuote(quote);
       setAuthor(author);
+      // Randomly select a color from the colors array
+      const randomColor = colors[Math.floor(Math.random() * colors.length)];
+      setBackgroundColor(randomColor);
     } catch (error) {
       console.error('Error fetching quote:', error);
     }
@@ -147,14 +53,17 @@ export default function HomeScreen({ navigation }) {
   const saveToFavorites = () => {
     const newFavorite = { quote, author };
     setFavorites([...favorites, newFavorite]);
-    // Pass updated favorites array to the Favorites tab
     navigation.navigate('Favorites', { favorites: [...favorites, newFavorite] });
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.quote}>"{quote}"</Text>
-      <Text style={styles.author}>- {author}</Text>
+    <View style={[styles.container, { backgroundColor }]}>
+      <View style={styles.quoteContainer}>
+        <Text style={styles.quoteText}>"{quote}"</Text>
+      </View>
+      <View style={styles.authorContainer}>
+        <Text style={styles.authorText}>- {author}</Text>
+      </View>
       <View style={styles.buttonContainer}>
         <Button title="Share" onPress={shareQuote} color="#007bff" />
         <Button title="Save to Favorites" onPress={saveToFavorites} color="#28a745" />
@@ -170,16 +79,30 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 20,
   },
-  quote: {
+  quoteContainer: {
+    padding: 10,
+    borderColor: 'white',
+    borderWidth: 2,
+    borderRadius: 10,
+    marginVertical: 10,
+    shadowColor: 'black',
+    
+   
+  },
+  quoteText: {
     fontSize: 20,
     fontStyle: 'italic',
-    marginBottom: 10,
     textAlign: 'center',
+    color: 'white',
   },
-  author: {
+  authorContainer: {
+    marginVertical: 10,
+  },
+  authorText: {
     fontSize: 16,
     fontWeight: 'bold',
     textAlign: 'center',
+    
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -188,5 +111,3 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
 });
-
-
