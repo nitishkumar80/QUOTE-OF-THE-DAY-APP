@@ -1,9 +1,14 @@
 import React from 'react';
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native'; // Changed Button to TouchableOpacity
 import { LinearGradient } from 'expo-linear-gradient';
+import Icon from 'react-native-vector-icons/FontAwesome'; 
 
-export default function FavoritesScreen({ route }) {
+export default function FavoritesScreen({ route, navigation }) { // Added navigation prop
   const { favorites } = route.params;
+
+  const handleGoBack = () => {
+    navigation.goBack(); // Navigate back to the previous screen
+  };
 
   return (
     <LinearGradient colors={['#FFB702', '#0A4E95']} style={styles.container}>
@@ -19,6 +24,12 @@ export default function FavoritesScreen({ route }) {
           <Text style={styles.noFavoritesText}>You have no favorites yet!</Text>
         )}
       </ScrollView>
+     
+      {/* Touchable component for the "Back" button */}
+      <TouchableOpacity onPress={handleGoBack} style={styles.backButton}>
+      <Icon name="chevron-left" size={30}  style={styles.backIcon}/>
+        
+      </TouchableOpacity>
     </LinearGradient>
   );
 }
@@ -55,5 +66,24 @@ const styles = StyleSheet.create({
   noFavoritesText: {
     fontSize: 18,
     textAlign: 'center',
+  },
+  backButton: {
+    marginTop: 20,
+    padding: 10,
+   
+    borderRadius: 5,
+  },
+  backButtonText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: 'white',
+  },
+
+
+  backIcon:{
+marginTop:-70,
+color: 'white',
+padding: 10,
+backgroundColor: '#FFB702',
   },
 });

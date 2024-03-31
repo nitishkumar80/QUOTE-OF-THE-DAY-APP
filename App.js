@@ -1,40 +1,43 @@
 
-import HomeScreen from './component/Pages/HomeScreen';
-import FavoritesScreen from './component/Pages/FavoritesScreen';
-
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { MaterialIcons } from '@expo/vector-icons';
+import { createStackNavigator } from '@react-navigation/stack';
 
 
-const Tab = createBottomTabNavigator();
+import FavoritesScreen from './component/Pages/FavoritesScreen';
+import Screen from './component/Pages/Screen';
+import HomeScreen from './component/Pages/HomeScreen';
 
+
+const Stack = createStackNavigator();
+
+
+
+// Main App component
 export default function App() {
-  const [favorites, setFavorites] = React.useState([]);
+  const [showOnboarding, setShowOnboarding] = useState(true); // State variable to control onboarding screen
+
+  // Check if onboarding has been completed
+  useEffect(() => {
+    // Example logic to check if onboarding has been completed
+    const onboardingCompleted = false; // Change this to true if onboarding has been completed
+    setShowOnboarding(!onboardingCompleted);
+  }, []);
 
   return (
     <NavigationContainer>
-      <Tab.Navigator
-        screenOptions={({ route }) => ({
-          tabBarIcon: ({ color, size }) => {
-            let iconName;
-            if (route.name === 'Home') {
-              iconName = 'home';
-            } else if (route.name === 'Favorites') {
-              iconName = 'favorite';
-            }
-            return <MaterialIcons name={iconName} size={size} color={color} />;
-          },
-        })}
-        tabBarOptions={{
-          activeTintColor: 'blue',
-          inactiveTintColor: 'gray',
-        }}
-      >
-        <Tab.Screen name="Home" component={HomeScreen} initialParams={{ favorites }} />
-        <Tab.Screen name="Favorites" component={FavoritesScreen} />
-      </Tab.Navigator>
+      <Stack.Navigator>
+        {showOnboarding ? (
+          <Stack.Screen name="Screen" component={Screen} options={{ headerShown: false }}/>
+        ) : (
+          <Stack.Screen name="MainStack" component={MainStack} options={{ headerShown: false }} />
+        )}
+        <Stack.Screen name="HomeScreen" component={HomeScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="FavoritesScreen" component={FavoritesScreen} options={{ headerShown: false }} />
+      </Stack.Navigator>
+     
     </NavigationContainer>
   );
 }
+
+
