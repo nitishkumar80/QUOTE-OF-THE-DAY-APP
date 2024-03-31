@@ -2,11 +2,11 @@
 import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import Screen from './Component/Pages/Screen';
+import HomeScreen from './Component/Pages/HomeScreen';
+import FavoritesScreen from './Component/Pages/FavouritesScreen';
 
 
-import FavoritesScreen from './component/Pages/FavoritesScreen';
-import Screen from './component/Pages/Screen';
-import HomeScreen from './component/Pages/HomeScreen';
 
 
 const Stack = createStackNavigator();
@@ -28,7 +28,7 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator>
         {showOnboarding ? (
-          <Stack.Screen name="Screen" component={Screen} options={{ headerShown: false }}/>
+          <Stack.Screen name="Screen" component={Screen } options={{ headerShown: false }}/>
         ) : (
           <Stack.Screen name="MainStack" component={MainStack} options={{ headerShown: false }} />
         )}
